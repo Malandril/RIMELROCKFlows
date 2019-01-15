@@ -1,6 +1,4 @@
 {
-  "directed": true,
-  "graph": [],
   "nodes": [
     {
       "color": "#da991c",
@@ -439,6 +437,5 @@
       "source": 43,
       "target": 15
     }
-  ],
-  "multigraph": false
+  ]
 }
