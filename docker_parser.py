@@ -1,9 +1,7 @@
 import argparse
 import json
-import os
 import pathlib
 import re
-from pprint import pprint
 
 DOCKERFILE_PATTERN = "Dockerfile"
 BUILD_SCRIPT = "build.sh"
@@ -58,6 +56,8 @@ def main():
         for dockerfile in dockerfile_paths:
             dockerfiles.append({"path": dockerfile, "from": parse_file(dockerfile, DOCKER_FROM_PATTERN, 1)[0]})
         result = []
+        nodes = []
+        links = []
         for script in build_scripts:
             res = parse_file(script, DOCKER_BUILD_PATTERN, 1, 2, 0)
             if res:
@@ -75,10 +75,27 @@ def main():
                                 dockerfile["name"] = str(project.name)
                                 break
                         result.append((dockerfile["name"], dockerfile["from"]))
+
+                        node = {"id": dockerfile["name"]}
+                        if node not in nodes:
+                            nodes.append(node)
+                            start = len(nodes) - 1
+                        else:
+                            start = nodes.index(node)
+                        node = {"id": dockerfile["from"]}
+                        if node not in nodes:
+                            nodes.append(node)
+                            end = len(nodes) - 1
+                        else:
+                            end = nodes.index(node)
+                        links.append({"source": start, "target": end})
+
                         break
 
         with open("res.json", "w") as f:
             json.dump(result, f)
+        with open("D3_visualisation/graph_rockflows.json", "w") as f:
+            json.dump({"nodes": nodes, "links": links}, f)
 
 
 if __name__ == '__main__':
