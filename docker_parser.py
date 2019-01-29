@@ -70,6 +70,8 @@ def main():
 
             if "name" in dockerfile:
                 node = {"id": dockerfile["project_name"] if "project_name" in dockerfile else dockerfile["name"]}
+                if "project_name" in dockerfile:
+                    node["type"] = "repo"
                 if node not in nodes:
                     nodes.append(node)
                     start = len(nodes) - 1
