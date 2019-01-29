@@ -45,7 +45,8 @@
                 return d.color;
             })
             .on("mouseover", function () {
-                d3.select(this).style("stroke", "#999").attr("stroke-opacity", "1.0");
+                d3.select(this).style("stroke", "#999")
+                    .attr("stroke-opacity", "1.0");
             })
             .on("mouseout", function () {
                 d3.select(this).style("stroke", function (d) {
@@ -56,10 +57,10 @@
                 }).attr("stroke-opacity", "1.0")
             });
 
-        link.append("title")
-            .text(function (d) {
-                return d.label
-            });
+        // link.append("title")
+        //     .text(function (d) {
+        //         return d.label
+        //     });
 
         var node = vis.selectAll("g.node")
             .data(json.nodes)
@@ -78,18 +79,22 @@
                 return d.color_border;
             })
             .style("fill", function (d) {
-                if (d.color === undefined) {
+                if(d.type === "repo"){
                     d.color = "#090";
+                } else {
+                    d.color = "#099";
                 }
                 return d.color;
             })
             .style("stroke-width", "4")
             .on("mouseover", function () {
+                d3.select(this.parentElement.children[1]).style("font-size", "20px");
                 d3.select(this).style("fill", "#999");
             })
             .on("mouseout", function (d) {
+                d3.select(this.parentElement.children[1]).style("font-size", "10px");
                 d3.select(this).style("fill", d.color);
-            });
+            })
 
         node.append("svg:text")
             .attr("text-anchor", "middle")
